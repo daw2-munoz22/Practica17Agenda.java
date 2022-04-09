@@ -1,5 +1,9 @@
 
 import java.io.File;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -15,17 +19,29 @@ public class AgendaUI extends javax.swing.JFrame {
     /**
      * Creates new form AgendaUI
      */
-    public AgendaUI() {
+    private DatabaseManager BaseDatos;
+    public AgendaUI() throws SQLException {
         initComponents();
-         try{
-            String ruta = new File(".").getCanonicalPath() + "/Agenda.agenda";
-            DatabaseManager connect = new DatabaseManager(ruta);
-            
-        }catch (Exception e){
-            System.out.println("Error");
-        }
+        BaseDatos = getDatabase();
+        BaseDatos.getConnection(); 
+        BaseDatos.getDriver();
+        BaseDatos.createDatabaseQuery();        
+        
+       // int identificador = 12;
+        //BaseDatos.Delete(identificador);
     }
-
+    
+    private DatabaseManager getDatabase(){
+        try{
+            String ruta = new File(".").getCanonicalPath() + "/Agenda.agenda";
+            DatabaseManager db = new DatabaseManager(ruta);
+            return db;
+        }catch(Exception e){
+            System.out.println("Error");
+            return null;
+        }
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -107,7 +123,11 @@ public class AgendaUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AgendaUI().setVisible(true);
+                try {
+                    new AgendaUI().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(AgendaUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
