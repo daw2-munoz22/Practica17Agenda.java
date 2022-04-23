@@ -31,7 +31,7 @@ public class AgendaUI extends javax.swing.JFrame {
         //BaseDatos.Delete(identificador);
     }
     
-    SearchForm frm = new SearchForm();
+   
     
     private DatabaseManager getDatabase(){
         try{
@@ -97,12 +97,26 @@ public class AgendaUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+         
+        SearchForm frm;
+        try {
+            frm = new SearchForm();
+            frm.setVisible(true);        
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        frm.setVisible(true);        
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        frm.setVisible(true);
+         SearchForm frm;
+        try {
+            frm = new SearchForm();
+            frm.setVisible(true);
+        } catch (SQLException ex) {
+            Logger.getLogger(AgendaUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
         
     }//GEN-LAST:event_jButton2ActionPerformed
 

@@ -1,3 +1,12 @@
+
+import java.io.File;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
@@ -12,10 +21,65 @@ public class SearchForm extends javax.swing.JFrame {
     /**
      * Creates new form SearchForm
      */
-    public SearchForm() {
+    private DefaultTableModel model;
+    
+    public SearchForm() throws SQLException {
         initComponents();
-    }
+        UpdateData();
 
+    }
+         
+    private void UpdateData() throws SQLException{                
+        if (!JTableEmpty(jTable1)){
+            getDatos();     
+        }                
+    }
+    public boolean JTableEmpty(JTable jTable) {
+        if (jTable != null && jTable.getModel() != null) {
+            return jTable.getModel().getRowCount()<=0 ? true : false;
+        }
+        return false;
+    }
+     
+    private DatabaseManager getDatabase(){
+        try{
+            String ruta = new File(".").getCanonicalPath() + "/Agenda.agenda";
+            DatabaseManager db = new DatabaseManager(ruta);
+            return db;
+        }catch(Exception e){
+            System.out.println("Error");
+            return null;
+        }
+        
+    }
+    
+    private void getDatos() throws SQLException{      
+        DatabaseManager db = getDatabase();
+        db.getConnection();
+        
+        ArrayList<Select> Datos = db.SelectTableQuery();
+        if (Datos != null){              
+            String[][] Contenido = new String[Datos.size()][];                    
+            String[] columnas = {"ID", "Nom", "Cognom1", "Cognom2", "Mail", "Telefon"};         
+        
+            for (int i = 0; i < Datos.size(); i++){
+                 Select fila = Datos.get(i);
+
+                 String[] columna = {                                                                   
+                     Integer.toString(fila.getID()),                                  
+                     fila.getNom(),                                                      
+                     fila.getCognom1(),                                                      
+                     fila.getCognom2(),                                                      
+                     fila.getMail(),                                                      
+                     fila.getTelefon()
+                 };                           
+                 Contenido[i] = columna;               
+            } 
+             model = (DefaultTableModel)jTable1.getModel();        
+             model.setDataVector(Contenido, columnas);   
+             jTable1.setModel(model);             
+        }                                  
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -82,6 +146,11 @@ public class SearchForm extends javax.swing.JFrame {
         });
 
         jButton9.setText("Buscar");
+        jButton9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton9ActionPerformed(evt);
+            }
+        });
 
         jTextField1.setText("jTextField1");
 
@@ -111,7 +180,7 @@ public class SearchForm extends javax.swing.JFrame {
                 .addComponent(jButton4)
                 .addGap(43, 43, 43))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(805, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton3)
                     .addComponent(jButton2))
@@ -128,7 +197,7 @@ public class SearchForm extends javax.swing.JFrame {
                         .addComponent(jButton7)
                         .addGap(134, 134, 134)
                         .addComponent(jButton8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 131, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jButton9)))
@@ -181,9 +250,22 @@ public class SearchForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-         //Delete From Dades(Nom,Cognom1,Cognom2,Telefon,Mail);
+        
+        try {
+            getDatos();
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jTable1.setModel(model);
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+        try {
+            UpdateData();
+        } catch (SQLException ex) {
+            Logger.getLogger(SearchForm.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -215,7 +297,11 @@ public class SearchForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new SearchForm().setVisible(true);
+                try {
+                    new SearchForm().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(SearchForm.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
