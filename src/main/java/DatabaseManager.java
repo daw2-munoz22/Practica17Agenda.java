@@ -101,12 +101,22 @@ public class DatabaseManager {
         }
         return null;
     }      
-    
+    public PreparedStatement updateDatabaseQuery(Integer id, String nom, String cognom1, String cognom2, String telefon, String mail) throws SQLException{
+        String query5 = "UPDATE Dades SET nom ='" + nom +  "', cognom = '" + cognom1 + "', cognom2 ='" + cognom2 + "', telefon = '" + telefon + "', mail = '" + mail + "' WHERE id =" + id;     
+        Connection conectar = getConnection();
+        PreparedStatement ejecutar = conectar.prepareStatement(query5);
+        ejecutar.executeUpdate();
+        return ejecutar;
+    }
     public boolean Delete(int identificador) throws SQLException{
+        String query4 = "DELETE FROM Dades WHERE ID =" + identificador;
         try{
-            String query4 = "DELETE FROM Dades WHERE ID =" + identificador;
+            Connection conectar = getConnection();
+            Statement ejecutar = conectar.createStatement();
+            ejecutar.execute(query4);
             return true;
-        }catch(SQLException e){
+        }catch(Exception e){
+            System.out.println(e.getMessage());
             return false;
         }
                   

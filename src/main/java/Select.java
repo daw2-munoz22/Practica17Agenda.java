@@ -17,6 +17,7 @@ public class Select{
     
     public Select(Integer id, String nom, String cognom1, String cognom2, String telefon, String mail){
         this.id = id;
+        this.nom = nom;
         this.cognom1 = cognom1;
         this.cognom2 = cognom2;
         this.telefon = telefon;

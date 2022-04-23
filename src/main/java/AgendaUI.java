@@ -31,6 +31,8 @@ public class AgendaUI extends javax.swing.JFrame {
         //BaseDatos.Delete(identificador);
     }
     
+    SearchForm frm = new SearchForm();
+    
     private DatabaseManager getDatabase(){
         try{
             String ruta = new File(".").getCanonicalPath() + "/Agenda.agenda";
@@ -64,6 +66,11 @@ public class AgendaUI extends javax.swing.JFrame {
         });
 
         jButton2.setText("Cercar un registre");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -90,8 +97,14 @@ public class AgendaUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        
+        frm.setVisible(true);        
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        frm.setVisible(true);
+        
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
